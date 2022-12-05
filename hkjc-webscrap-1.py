@@ -24,5 +24,3 @@ chrome.get("https://racing.hkjc.com/racing/information/Chinese/Racing/LocalResul
 #chrome.get("http://www.yahoo.com")
 time.sleep(3)
 print(chrome.page_source)
-
-#add comment
