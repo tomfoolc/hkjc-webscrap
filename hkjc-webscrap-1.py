@@ -7,11 +7,14 @@ Web Scraping - get data from HK Jockey Club
 """
 
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.utils import ChromeType
+from selenium.webdriver.chrome.options import Options
+
 from selenium.webdriver.common.by import By
 
-from webdriver_manager.chrome import ChromeDriverManager
+
 import time
 
 #define Chrome Options
@@ -22,14 +25,14 @@ options.binary_location = r'C:\Program Files\BraveSoftware\Brave-Browser\Applica
 options.add_argument("--disable-notifications")
 
 #driver is placed on the upper folder and named as chromedriver108
-#chrome = webdriver.Chrome('../driver/chromedriver108', options=options)
-chrome = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+#selenium4 changed to use selenium.webdriver.chrome.service to initial webdriver
+#ref: http://pypi.org/project/webdriver-manager
+#chrome = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options) #Chrome
+chrome = webdriver.Chrome(service=Service(ChromeDriverManager(chrome_type=ChromeType.BRAVE).install()), options=options) #Brave
 
 chrome.get("https://racing.hkjc.com/racing/information/Chinese/Racing/LocalResults.aspx")
-#chrome.get("http://www.yahoo.com")
 
 time.sleep(3)
-#print(chrome.page_source)
 
 raceDateList = chrome.find_element(By.ID, "selectId")
 raceDateItems = raceDateList.find_elements(By.TAG_NAME, "option")
