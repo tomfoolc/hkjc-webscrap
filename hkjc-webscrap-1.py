@@ -135,43 +135,35 @@ soup = getBs4fromPage('', '', '', '', chrome)
 raceDateItems = [r'07/12/2022']
 #print(raceDateItems)
 
-header = ["RaceYear","RaceMonth","RaceDay","LastRaceNo"]
-data = []
+#header = ["RaceYear","RaceMonth","RaceDay","LastRaceNo"]
+raceHeader = ["race_year","race_month","race_day","race_date","race_no","race_id","venue","config","surface","distance","going_type","going_condition","class"]
+raceInitData = []
+
+for raceDate in reversed(raceDateItems):
+    raceDay = raceDate[:2]
+    raceMonth = raceDate[3:5]
+    raceYear = raceDate[6:]
+
+    if (f'{raceYear}{raceMonth.zfill(2)}{raceDay.zfill(2)}' > f'{_StartYear}{_StartMonth.zfill(2)}{_StartDay.zfill(2)}'):
+        soup = getBs4fromPage(raceYear, raceMonth, raceDay, '', chrome)
+        lastRaceNo = getLastRaceNo(raceYear, raceMonth, raceDay, soup)
+
+        for i in range(1, lastRaceNo):
+            raceInitData.append({"RaceYear":raceYear, "RaceMonth":raceMonth, "RaceDay":raceDay, "RaceNo":i})
+
+for raceData in raceInitData:
+    soup = getBs4fromPage(raceData.get("RaceYear"), _raceMonth, _raceDay, _raceNo, _chrome)
+
+
+
+"""
 with open(r"./race_list"+date.today().strftime(r'%y%m%d')+".csv","a",encoding="UTF8",newline="") as f:
     writer = csv.DictWriter(f, fieldnames=header)
-
-    for raceDate in raceDateItems:
-        raceDay = raceDate[:2]
-        raceMonth = raceDate[3:5]
-        raceYear = raceDate[6:]
-
-        if (f'{raceYear}{raceMonth.zfill(2)}{raceDay.zfill(2)}' > f'{_StartYear}{_StartMonth.zfill(2)}{_StartDay.zfill(2)}'):
-            soup = getBs4fromPage(raceYear, raceMonth, raceDay, '', chrome)
-            lastRaceNo = getLastRaceNo(raceYear, raceMonth, raceDay, soup)
-
-        data.append({"RaceYear":raceYear, "RaceMonth":raceMonth, "RaceDay":raceDay, "LastRaceNo":lastRaceNo})
 
     if (len(data) > 0):
         writer.writeheader()
         writer.writerows(data)
+"""
 
-#soup = getBs4fromPage('2022', '11', '02', '', chrome)
-#isValidRaceDate('2022', '11', '02', soup)
-#lastRaceNo = getLastRaceNo('2022', '11', '01', chrome)
-
-#chrome.get(getHkjcRaceResultUrl('2022','12','07'))
-#soup = BeautifulSoup(chrome.page_source, 'html.parser')
-#time.sleep(30)
-#print(isValidRaceDate('2022','12','07', soup))
-
-
-# To-do
-# 1. assemble the race date and get the race result page
-# 2. cross check the race date with the input race date (div.raceMeeting_select > span.f_fl.f_fs13) and check raceno (div.localResults.commContent.fontFam > tr.bg_blue.color_w.font_wb)
-# 3. cross check with the input date for stopping the web scraping
-# 4. determine valid racing result
-# 4.1 exclude Typhoon day (2-Nov-2022) 
-# 4.2 exclude non-HK racing (1-Nov-2022) (no span.ff_fl.f_fs13 under div.raceMeeting_select)
-#
 
 print(f'Completed test')
