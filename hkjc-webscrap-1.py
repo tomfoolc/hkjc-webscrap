@@ -131,8 +131,8 @@ chrome = webdriver.Chrome(service=Service(ChromeDriverManager(chrome_type=Chrome
 # get Racing Date
 ##################
 soup = getBs4fromPage('', '', '', '', chrome)
-#raceDateItems = getRaceDate(soup)
-raceDateItems = [r'07/12/2022']
+raceDateItems = getRaceDate(soup)
+#raceDateItems = [r'07/12/2022']
 #print(raceDateItems)
 
 header = ["RaceYear","RaceMonth","RaceDay","LastRaceNo"]
